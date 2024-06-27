@@ -31,6 +31,7 @@ export default class BuildingController implements IBuildingController {
 
   public async updateBuilding(req: Request, res: Response, next: NextFunction) {
     try {
+      req.body.id = req.params.id;
       const buildingOrError = await this.buildingServiceInstance.updateBuilding(req.body as IBuildingDTO) as Result<IBuildingDTO>;
 
       if (buildingOrError.isFailure) {
@@ -39,6 +40,36 @@ export default class BuildingController implements IBuildingController {
 
       const buildingDTO = buildingOrError.getValue();
       return res.status(200).json({ message: "Building updated successfully", data: buildingDTO });
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  public async getBuilding(req: Request, res: Response, next: NextFunction) {
+    try {
+      const buildingOrError = await this.buildingServiceInstance.getBuilding(req.params.id) as Result<IBuildingDTO>;
+
+      if (buildingOrError.isFailure) {
+        return res.status(404).json({ message: buildingOrError.errorValue() });
+      }
+
+      const buildingDTO = buildingOrError.getValue();
+      return res.status(200).json({ message: "Building retrieved successfully", data: buildingDTO });
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  public async getBuildings(req: Request, res: Response, next: NextFunction) {
+    try {
+      const buildingsOrError = await this.buildingServiceInstance.getBuildings() as Result<IBuildingDTO[]>;
+
+      if (buildingsOrError.isFailure) {
+        return res.status(404).json({ message: buildingsOrError.errorValue() });
+      }
+
+      const buildingsDTO = buildingsOrError.getValue();
+      return res.status(200).json({ message: "Buildings retrieved successfully", data: buildingsDTO });
     } catch (e) {
       return next(e);
     }

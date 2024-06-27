@@ -24,8 +24,11 @@ export default (app: Router) => {
     }),
     (req, res, next) => ctrl.createBuilding(req, res, next) );
 
-  route.put('/id',
+  route.put('/:id',
     celebrate({
+      params: Joi.object({
+        id: Joi.string().required()
+      }),
       body: Joi.object({
         name: Joi.string().optional(),
         code: Joi.string().optional(),
@@ -36,4 +39,15 @@ export default (app: Router) => {
       }),
     }),
     (req, res, next) => ctrl.updateBuilding(req, res, next) );
+
+    route.get('/:id',
+    celebrate({
+      params: Joi.object({
+        id: Joi.string().required()
+      })
+    }),
+    (req, res, next) => ctrl.getBuilding(req, res, next) );
+
+    route.get('',
+    (req, res, next) => ctrl.getBuildings(req, res, next) );
 };
