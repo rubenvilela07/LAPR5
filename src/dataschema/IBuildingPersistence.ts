@@ -5,4 +5,5 @@ export interface IBuildingPersistence {
     description: string;
     length: number;
     width: number;
+    numberOfFloors: number;
   }

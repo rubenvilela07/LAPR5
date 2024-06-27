@@ -1,6 +1,7 @@
 import { ValueObject } from "../../core/domain/ValueObject";
 import { Result } from "../../core/logic/Result";
 import { Guard } from "../../core/logic/Guard";
+import BuildingRepo from "../../repos/buildingRepo";
 
 interface BuildingCodeProps {
   code: string;
@@ -12,7 +13,7 @@ export class BuildingCode extends ValueObject<BuildingCodeProps> {
     }
 
     private constructor (props: BuildingCodeProps) {
-        super(props);
+        super(props);        
     }
 
     public static create (code: string): Result<BuildingCode> {
@@ -23,7 +24,7 @@ export class BuildingCode extends ValueObject<BuildingCodeProps> {
         
         if (code.length !== 5) {
             return Result.fail<BuildingCode>('BuildingId must have exactly 5 characters.');
-          }
+        }
         
         return Result.ok<BuildingCode>(new BuildingCode({ code: code }));
     }

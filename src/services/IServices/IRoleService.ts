@@ -5,5 +5,4 @@ export default interface IRoleService  {
   createRole(roleDTO: IRoleDTO): Promise<Result<IRoleDTO>>;
   updateRole(roleDTO: IRoleDTO): Promise<Result<IRoleDTO>>;
 
-  getRole (roleId: string): Promise<Result<IRoleDTO>>;
 }

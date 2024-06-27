@@ -3,10 +3,10 @@ import { Service, Inject } from 'typedi';
 import { Document, Model } from 'mongoose';
 import { IUserPersistence } from '../dataschema/IUserPersistence';
 
-import IUserRepo from "../services/IRepos/IUserRepo";
-import { User } from "../domain/user";
-import { UserId } from "../domain/userId";
-import { UserEmail } from "../domain/userEmail";
+import IUserRepo from "./IRepos/IUserRepo";
+import { User } from "../domain/user/user";
+import { UserId } from "../domain/user/userId";
+import { UserEmail } from "../domain/user/userEmail";
 import { UserMap } from "../mappers/UserMap";
 
 @Service()

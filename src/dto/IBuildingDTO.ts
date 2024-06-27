@@ -5,4 +5,5 @@ export default interface IBuildingDTO {
     description: string;
     length: number;
     width: number;
+    numberOfFloors: number;
 }

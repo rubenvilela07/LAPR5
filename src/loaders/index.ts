@@ -4,11 +4,15 @@ import mongooseLoader from './mongoose';
 import Logger from './logger';
 
 import config from '../../config';
+import buildingSchema from '../persistence/schemas/buildingSchema';
+import path from 'path';
 
 export default async ({ expressApp }) => {
   const mongoConnection = await mongooseLoader();
   Logger.info('✌️ DB loaded and connected!');
 
+
+    // -------------------------------------- Schema Loader --------------------------------------
   const userSchema = {
     // compare with the approach followed in repos and services
     name: 'userSchema',
@@ -21,10 +25,25 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/roleSchema',
   };
 
+  const buildingSchema = {
+    // compare with the approach followed in repos and services
+    name: 'buildingSchema',
+    schema: '../persistence/schemas/buildingSchema',
+  };
+
+    // -------------------------------------- Controller Loader --------------------------------------
+
   const roleController = {
     name: config.controllers.role.name,
     path: config.controllers.role.path
   }
+
+  const buildingController = {
+    name: config.controllers.building.name,
+    path: config.controllers.building.path
+  }
+
+    // -------------------------------------- Repo Loader --------------------------------------
 
   const roleRepo = {
     name: config.repos.role.name,
@@ -36,26 +55,42 @@ export default async ({ expressApp }) => {
     path: config.repos.user.path
   }
 
+  const buildingRepo = {
+    name: config.repos.building.name,
+    path: config.repos.building.path
+  }
+
+    // -------------------------------------- Service Loader --------------------------------------
+
   const roleService = {
     name: config.services.role.name,
     path: config.services.role.path
+  }
+
+  const buildingService = {
+    name: config.services.building.name,
+    path: config.services.building.path
   }
 
   await dependencyInjectorLoader({
     mongoConnection,
     schemas: [
       userSchema,
-      roleSchema
+      roleSchema,
+      buildingSchema
     ],
     controllers: [
-      roleController
+      roleController,
+      buildingController
     ],
     repos: [
       roleRepo,
-      userRepo
+      userRepo,
+      buildingRepo
     ],
     services: [
-      roleService
+      roleService,
+      buildingService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

@@ -10,7 +10,6 @@ const Building = new mongoose.Schema(
 
     name: {
       type: String,
-      required: [true, 'Please enter building name'],
       index: true,
     },
 
@@ -18,11 +17,11 @@ const Building = new mongoose.Schema(
       type: String,
       required: [true, 'Please enter building code'],
       index: true,
+      unique: true,
     },
 
     description: {
       type: String,
-      required: [true, 'Please enter building description'],
       index: true,
     },
 
@@ -35,6 +34,11 @@ const Building = new mongoose.Schema(
     width: {
       type: Number,
       required: [true, 'Please enter building width'],
+      index: true,
+    },
+    numberOfFloors: {
+      type: Number,
+      required: [true, 'Please enter number of floors'],
       index: true,
     },
   },
