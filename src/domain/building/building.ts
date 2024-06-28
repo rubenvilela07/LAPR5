@@ -1,7 +1,6 @@
 import { AggregateRoot } from "../../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
 import { Result } from "../../core/logic/Result";
-import { Guard } from "../../core/logic/Guard";
 import {BuildingCode} from "./buildingCode";
 import { Dimension } from "./dimension";
 import  IBuildingDTO  from "./../../dto/IBuildingDTO";

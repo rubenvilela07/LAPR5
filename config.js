@@ -50,6 +50,10 @@ export default {
       name: "BuildingController",
       path: "../controllers/buildingController"
     },
+    floor: {
+      name: "FloorController",
+      path: "../controllers/floorController"
+    }
   },
 
   repos: {
@@ -65,6 +69,10 @@ export default {
       name: "BuildingRepo",
       path: "../repos/buildingRepo"
     },
+    floor: {
+      name: "FloorRepo",
+      path: "../repos/floorRepo"
+    },
   },
 
   services: {
@@ -76,5 +84,10 @@ export default {
       name: "BuildingService",
       path: "../services/buildingService"
     },
+    floor: {
+      name: "FloorService",
+      path: "../services/floorService"
+      
+    }
   },
 };
