@@ -28,11 +28,13 @@ export default class FloorService implements IFloorService {
         }
     }
 
+
+    //TODO: implementar logica para verifica se o numero do andar é o minimo
     public async createFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
         try {
-            const floorNumberExists = await this.floorRepo.existsNumber(floorDTO.floorNumber);
+            const floorNumberExists = await this.floorRepo.existsNumberInBuilding(floorDTO.floorNumber, floorDTO.buildingCode);
             if(floorNumberExists){
-                return Result.fail<IFloorDTO>('Floor number already exists');
+                return Result.fail<IFloorDTO>('Floor number already exists in building');
             }
 
             const floorOrError = await Floor.create( floorDTO );
@@ -63,7 +65,7 @@ export default class FloorService implements IFloorService {
                 if(!floorDTO.description) floorDTO.description = floor.description;
                 if(!floorDTO.buildingCode) floorDTO.buildingCode = floor.buildingCode.code;
 
-                if (await this.floorRepo.existsNumber(floorDTO.floorNumber)) {
+                if (await this.floorRepo.existsNumberInBuilding(floorDTO.floorNumber, floorDTO.buildingCode)) {
                     return Result.fail<IFloorDTO>('Floor number already exists');
                 }
 

@@ -78,9 +78,12 @@ export default class FloorRepo implements IFloorRepo {
   }
 
 
-  public async existsNumber(floorNumber: number): Promise<boolean> {
-    const query = { floorNumber: floorNumber };
-    const floorDocument = await this.floorSchema.findOne(query);
-    return !!floorDocument;
+  public async existsNumberInBuilding(floorNumber: number, buildingCode: string): Promise<boolean> {
+    const query = { floorNumber: floorNumber, buildingCode: buildingCode };
+    const floorDocument = await this.floorSchema.findOne(
+      query
+    );
+
+    return !!floorDocument === true;
   }
 }
