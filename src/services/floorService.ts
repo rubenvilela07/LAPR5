@@ -6,12 +6,14 @@ import IFloorRepo from "../repos/IRepos/IFloorRepo";
 import config from "../../config";
 import { Inject, Service } from "typedi";
 import { FloorMap } from "../mappers/FloorMap";
+import IBuildingRepo from "../repos/IRepos/IBuildingRepo";
 
 
 @Service()
 export default class FloorService implements IFloorService {
     constructor(
-        @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
+        @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
+        @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
   ) {}
 
     public async getFloor(id: string): Promise<Result<IFloorDTO>> {
@@ -35,6 +37,15 @@ export default class FloorService implements IFloorService {
             const floorNumberExists = await this.floorRepo.existsNumberInBuilding(floorDTO.floorNumber, floorDTO.buildingCode);
             if(floorNumberExists){
                 return Result.fail<IFloorDTO>('Floor number already exists in building');
+            }
+
+            const building =  await this.buildingRepo.findByCode(floorDTO.buildingCode);
+            if (!building) {
+                return Result.fail<IFloorDTO>('Building not found');
+            }
+
+            if(building.numberOfFloors < floorDTO.floorNumber){
+                return Result.fail<IFloorDTO>('Floor number is greater than the number of floors in the building');
             }
 
             const floorOrError = await Floor.create( floorDTO );
