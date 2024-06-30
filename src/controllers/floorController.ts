@@ -4,6 +4,7 @@ import config from "../../config";
 import IFloorService from '../services/IServices/IFloorService';
 import IFloorController from './IControllers/IFloorController';
 import IFloorDTO from '../dto/IFloorDTO';
+import { Result } from '../core/logic/Result';
 
 @Service()
 export default class FloorController implements IFloorController {
@@ -39,7 +40,7 @@ export default class FloorController implements IFloorController {
 
     public async updateFloor(req: Request, res: Response, next: NextFunction) {
         try {
-        const floorOrError = await this.floorServiceInstance.updateFloor(req.params.id, req.body);
+        const floorOrError = await this.floorServiceInstance.updateFloor(req.params.id, req.body as IFloorDTO) as Result<IFloorDTO>;
         if (floorOrError.isFailure) {
             return res.status(400).json({ message: floorOrError.errorValue() });
         }
@@ -52,7 +53,7 @@ export default class FloorController implements IFloorController {
 
     public async getFloorsInBuilding(req: Request, res: Response, next: NextFunction) {
         try {
-        const floorOrError = await this.floorServiceInstance.getFloorsInBuilding(req.params.buildingCode);
+        const floorOrError = await this.floorServiceInstance.getFloorsInBuilding(req.params.code) as Result<IFloorDTO[]>;
         if (floorOrError.isFailure) {
             return res.status(400).json({ message: floorOrError.errorValue() });
         }

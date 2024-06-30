@@ -7,6 +7,7 @@ import config from "../../config";
 import { Inject, Service } from "typedi";
 import { FloorMap } from "../mappers/FloorMap";
 import IBuildingRepo from "../repos/IRepos/IBuildingRepo";
+import { Console } from "console";
 
 
 @Service()
@@ -72,12 +73,21 @@ export default class FloorService implements IFloorService {
                 return Result.fail<IFloorDTO>('Floor not found');
             }
             else {
-                if(!floorDTO.floorNumber) floorDTO.floorNumber = floor.floorNumber;
-                if(!floorDTO.description) floorDTO.description = floor.description;
-                if(!floorDTO.buildingCode) floorDTO.buildingCode = floor.buildingCode.code;
+                floor.floorNumber = floorDTO.floorNumber;
+                floor.description = floorDTO.description;
+                
 
                 if (await this.floorRepo.existsNumberInBuilding(floorDTO.floorNumber, floorDTO.buildingCode)) {
                     return Result.fail<IFloorDTO>('Floor number already exists');
+                }
+
+                const building =  await this.buildingRepo.findByCode(floorDTO.buildingCode);
+                if (!building) {
+                    return Result.fail<IFloorDTO>('Building not found');
+                }
+    
+                if(building.numberOfFloors < floorDTO.floorNumber){
+                    return Result.fail<IFloorDTO>('Floor number is greater than the number of floors in the building');
                 }
 
                 await this.floorRepo.save(floor);

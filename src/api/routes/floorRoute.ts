@@ -28,20 +28,20 @@ export default (app: Router) => {
       }),
       body: Joi.object({
         floorNumber: Joi.number().optional(),
-        description: Joi.string().optional(),
+        description: Joi.string().optional().allow(''),
         buildingCode: Joi.string().optional()
       }),
     }),
     (req, res, next) => ctrl.updateFloor(req, res, next) );
 
-    route.get('/:id',
+    route.get('/building/:code',
     celebrate({
       params: Joi.object({
-        id: Joi.string().required()
+        code: Joi.string().required()
       })
     }),
     (req, res, next) => ctrl.getFloorsInBuilding(req, res, next) );
 
-    route.get('',
+    route.get('/:id',
     (req, res, next) => ctrl.getFloor(req, res, next) );
 };
