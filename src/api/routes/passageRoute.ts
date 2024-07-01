@@ -38,13 +38,11 @@ export default (app: Router) => {
           id: Joi.string().required(),
         },
         body: Joi.object({
-          buildingCode1: Joi.string().required(),
-          buildingCode2: Joi.string().required(),
-          floor: Joi.number().required(),
-          building1_x: Joi.number().required(),
-          building1_y: Joi.number().required(),
-          building2_x: Joi.number().required(),
-          building2_y: Joi.number().required(),
+          floor: Joi.number().optional(),
+          building1_x: Joi.number().optional(),
+          building1_y: Joi.number().optional(),
+          building2_x: Joi.number().optional(),
+          building2_y: Joi.number().optional(),
         }),
       }),
       (req, res, next) => ctrl.updatePassage(req, res, next)

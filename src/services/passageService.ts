@@ -69,11 +69,61 @@ export default class PassageService implements IPassageService {
     }
   }
 
-  updatePassage(passageDTO: IPassageDTO): Promise<Result<IPassageDTO>> {
-    throw new Error("Method not implemented.");
+  public async updatePassage(passageDTO: IPassageDTO): Promise<Result<IPassageDTO>> {
+    try {
+      const passage = await this.passageRepo.findByDomainId(passageDTO.id);
+      if (!passage) {
+        return Result.fail<IPassageDTO>("Passage not found");
+      }
+      passageDTO.buildingCode1 = passage.buildingCode1.code;
+      passageDTO.buildingCode2 = passage.buildingCode2.code;
+      if(!passageDTO.floor) passageDTO.floor = passage.floor;
+      if(!passageDTO.building1_x) passageDTO.building1_x = passage.building1_x;
+      if(!passageDTO.building1_y) passageDTO.building1_y = passage.building1_y;
+      if(!passageDTO.building2_x) passageDTO.building2_x = passage.building2_x;
+      if(!passageDTO.building2_y) passageDTO.building2_y = passage.building2_y;
+
+      const building1  = await this.buildingRepo.findByCode(passageDTO.buildingCode1);
+      const building2  = await this.buildingRepo.findByCode(passageDTO.buildingCode2);
+
+      if(!(this.validatePassagePosition(passageDTO.building1_x, passageDTO.building1_y, building1))){
+        return Result.fail<IPassageDTO>("Invalid position for building 1");
+      }
+
+      if(!(this.validatePassagePosition(passageDTO.building2_x, passageDTO.building2_y, building2))){
+        return Result.fail<IPassageDTO>("Invalid position for building 2");
+      }
+
+      if(building1.numberOfFloors < passageDTO.floor || building2.numberOfFloors < passageDTO.floor){
+        return Result.fail<IPassageDTO>("Floor does not exist in one of the buildings");
+      }
+
+      const passageOrError = await Passage.create(passageDTO);
+      if (passageOrError.isFailure) {
+        return Result.fail<IPassageDTO>(passageOrError.error);
+      }
+
+      const passageResult = passageOrError.getValue();
+
+      await this.passageRepo.save(passageResult);
+
+      const passageDTOResult = PassageMap.toDTO(passageResult) as IPassageDTO;
+      return Result.ok<IPassageDTO>(passageDTOResult);
+    } catch (e) {
+      return Result.fail<IPassageDTO>(e);
+    }
   }
-  getAllPassages(): Promise<Result<IPassageDTO[]>> {
-    throw new Error("Method not implemented.");
+
+
+
+  public async getAllPassages(): Promise<Result<IPassageDTO[]>> {
+    try {
+      const passages = await this.passageRepo.findAll();
+      const passagesDTO = passages.map((passage) => PassageMap.toDTO(passage)) as IPassageDTO[];
+      return Result.ok<IPassageDTO[]>(passagesDTO);
+    } catch (e) {
+      return Result.fail<IPassageDTO[]>(e);
+    }
   }
 
   public validatePassagePosition(x: number, y: number, building: Building): boolean {
@@ -89,7 +139,7 @@ export default class PassageService implements IPassageService {
       return true;
     }
 
-    if (y == 0 && x <= building.dimension.width || y == building.dimension.length && x <= building.dimension.width) {
+    if (y == 0 && x <= building.dimension.length || y == building.dimension.length && x <= building.dimension.width) {
       return true;
     }
 

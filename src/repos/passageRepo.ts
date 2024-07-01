@@ -14,20 +14,27 @@ export default class PassageRepo implements IPassageRepo {
     private passageSchema: Model<IPassagePersistence & Document>
   ) {}
 
+  public async findByDomainId(id: string): Promise<Passage> {
+    const query = { domainId: id };
+    const passageRecord = await this.passageSchema.findOne
+    (query) as IPassagePersistence & Document;
+    if (passageRecord == null) return null;
+
+    return PassageMap.toDomain(passageRecord);
+  }
+
+
+  public async findAll(): Promise<Passage[]> {
+    const passageDocuments = await this.passageSchema.find();
+    return passageDocuments.map((passageDocument) => PassageMap.toDomain(passageDocument));
+  }
+
 
   public async exists(t: Passage): Promise<boolean> {
     const idX = t.id.toString();
     const query = { domainId: idX };
     const passageDocument = await this.passageSchema.findOne(query);
     return !!passageDocument === true;
-  }
-
-  public async findByDomainId(id: PassageId): Promise<Passage> {
-    const query = { domainId: id.toString() };
-    const passageRecord = await this.passageSchema.findOne
-    (query) as IPassagePersistence & Document;
-    if (passageRecord == null) return null;
-    return PassageMap.toDomain(passageRecord);
   }
 
   public async save(t: Passage): Promise<Passage> {

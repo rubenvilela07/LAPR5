@@ -4,12 +4,13 @@ import config from "../../config";
 import { Result } from "../core/logic/Result";
 import IPassageService from "../services/IServices/IPassageService";
 import IPassageDTO from "../dto/IPassageDTO";
+import IPassageController from "./IControllers/IPassageController";
 
 
 
 
 @Service()
-export default class PassageController {
+export default class PassageController implements IPassageController{
   constructor(
     @Inject(config.services.passage.name)
     private passageServiceInstance: IPassageService
@@ -35,9 +36,8 @@ export default class PassageController {
 
   public async updatePassage(req: Request, res: Response, next: NextFunction) {
     try {
-      const passageOrError = (await this.passageServiceInstance.updatePassage(
-        req.body as IPassageDTO
-      )) as Result<IPassageDTO>;
+      req.body.id = req.params.id;
+      const passageOrError = (await this.passageServiceInstance.updatePassage(req.body as IPassageDTO)) as Result<IPassageDTO>;
 
       if (passageOrError.isFailure) {
         return res.status(400).send(passageOrError.errorValue());
@@ -52,12 +52,12 @@ export default class PassageController {
 
   public async listPassages(req: Request, res: Response, next: NextFunction) {
     try {
-      const passages = await this.passageServiceInstance.getAllPassages() as Result<IPassageDTO[]>;
-
-      if (passages.isFailure) {
-        return res.status(400).send(passages.errorValue());
+      const passagesOrError = await this.passageServiceInstance.getAllPassages() as Result<IPassageDTO[]>;
+      if (passagesOrError.isFailure) {
+        return res.status(400).send(passagesOrError.errorValue());
       }
 
+      const passages = passagesOrError.getValue();
       return res.status(200).json(passages);
     } catch (e) {
       return next(e);
