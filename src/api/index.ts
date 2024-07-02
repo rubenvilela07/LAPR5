@@ -5,6 +5,7 @@ import role from './routes/roleRoute';
 import building from './routes/buildingRoute';
 import floor from './routes/floorRoute'
 import passage from './routes/passageRoute'
+import room from './routes/roomRoute'
 
 export default () => {
 	const app = Router();
@@ -15,6 +16,7 @@ export default () => {
 	building(app);
 	floor(app);
 	passage(app);
+	room(app);
 	
 	return app
 }

@@ -41,6 +41,11 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/passageSchema',
   }
 
+  const roomSchema = {
+    name: 'roomSchema',
+    schema: '../persistence/schemas/roomSchema',
+  }
+
     // -------------------------------------- Controller Loader --------------------------------------
 
   const roleController = {
@@ -61,6 +66,11 @@ export default async ({ expressApp }) => {
   const passageController = {
     name: config.controllers.passage.name,
     path: config.controllers.passage.path
+  }
+
+  const roomController = {
+    name: config.controllers.room.name,
+    path: config.controllers.room.path
   }
 
     // -------------------------------------- Repo Loader --------------------------------------
@@ -90,6 +100,13 @@ export default async ({ expressApp }) => {
     path: config.repos.passage.path
   }
 
+  const roomRepo = {
+    name: config.repos.room.name,
+    path: config.repos.room.path
+  }
+
+
+
     // -------------------------------------- Service Loader --------------------------------------
 
   const roleService = {
@@ -112,6 +129,11 @@ export default async ({ expressApp }) => {
     path: config.services.passage.path
   }
 
+  const roomService = {
+    name: config.services.room.name,
+    path: config.services.room.path
+  }
+
   await dependencyInjectorLoader({
     mongoConnection,
     schemas: [
@@ -119,26 +141,30 @@ export default async ({ expressApp }) => {
       roleSchema,
       buildingSchema,
       floorSchema,
-      passageSchema
+      passageSchema,
+      roomSchema
     ],
     controllers: [
       roleController,
       buildingController,
       floorController,
-      passageController
+      passageController,
+      roomController
     ],
     repos: [
       roleRepo,
       userRepo,
       buildingRepo,
       floorRepo,
-      passageRepo
+      passageRepo,
+      roomRepo
     ],
     services: [
       roleService,
       buildingService,
       floorService,
-      passageService
+      passageService,
+      roomService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');
