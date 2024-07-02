@@ -78,8 +78,8 @@ export class Room extends AggregateRoot<RoomProps> {
 
 
     const roomDescriptionDTO = roomDTO.description;
-    if (roomDescriptionDTO.length < 1 || roomDescriptionDTO.length > 100) {
-      return Result.fail<Room>('Description length must be between 1 and 100 characters.');
+    if (roomDescriptionDTO.length < 0 || roomDescriptionDTO.length > 100) {
+      return Result.fail<Room>('Description length must be between 0 and 100 characters.');
     }
 
     const roomLengthDTO = roomDTO.length;

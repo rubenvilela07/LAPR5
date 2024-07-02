@@ -46,6 +46,7 @@ export class RoomMap extends Mapper<Room> {
       locationDoorX: room.doorLocationX,
       locationDoorY: room.doorLocationX,
       roomType: room.roomType,
+      floor: room.floor
     };
 
 

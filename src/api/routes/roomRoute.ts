@@ -19,12 +19,12 @@ export default (app: Router) => {
       celebrate({
         body: Joi.object({
           roomName: Joi.string().required(),
-          description: Joi.string().optional(),
+          description: Joi.string().optional().allow(''),
           roomType: Joi.string().valid('Gabinete', 'Anfiteatro', 'Laboratorio', 'Outro').required(),
           length: Joi.number().required(),
           width: Joi.number().required(),
           buildingCode: Joi.string().required(),
-          Floor: Joi.number().required(),
+          floor: Joi.number().required(),
           locationX: Joi.number().required(),
           locationY: Joi.number().required(),
           locationDoorX: Joi.number().required(),

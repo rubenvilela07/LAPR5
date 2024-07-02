@@ -32,7 +32,6 @@ export default class FloorService implements IFloorService {
     }
 
 
-    //TODO: implementar logica para verifica se o numero do andar é o minimo
     public async createFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
         try {
             const floorNumberExists = await this.floorRepo.existsNumberInBuilding(floorDTO.floorNumber, floorDTO.buildingCode);
