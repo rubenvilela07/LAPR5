@@ -6,7 +6,9 @@
   "scripts": {
     "build": "npx tsc -p tsconfig.json",
     "heroku-postbuild": "npm run build",
-    "start": "nodemon",
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
+    "start:server": "nodemon src/app.ts",
+    "start:client": "cd ../frontend && npm start",
     "inspect": "nodemon --inspect src/app.ts",
     "test": "mocha -r ts-node/register **/*.test.ts",
     "lint": "npm run lint:js ",
@@ -73,6 +75,7 @@
     "@types/node": "^16.11.12",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "^6.7.2",
+    "concurrently": "^8.2.2",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^4.2.0",
     "eslint-plugin-prettier": "^3.0.1",
