@@ -33,10 +33,9 @@ export default class RoomController {
         }
     }
 
-    public async listRoomsInBuilding(req: Request, res: Response, next: NextFunction) {
+    public async getRoomsInBuilding(req: Request, res: Response, next: NextFunction) {
         try {
-            const roomsOrError = await this.roomServiceInstance.getRoomsInBuilding(req.body) as Result<Array<IRoomDTO>>;
-
+            const roomsOrError = await this.roomServiceInstance.getRoomsInBuilding(req.params.code) as Result<Array<IRoomDTO>>;
             if (roomsOrError.isFailure) {
                 return res.status(400).send();
             }

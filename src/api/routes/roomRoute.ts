@@ -35,10 +35,10 @@ export default (app: Router) => {
   );
 
   route.get(
-      "",
+      "/:code",
       celebrate({
-        body: Joi.object({
-          buildingCode: Joi.string().required(),
+        params: Joi.object({
+          code: Joi.string().required(),
         }),
       }),
       (req, res, next) => ctrl.getRoomsInBuilding(req, res, next)

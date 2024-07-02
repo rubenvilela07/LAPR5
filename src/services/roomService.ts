@@ -77,7 +77,7 @@ export default class RoomService implements IRoomService {
     buildingCode: string
   ): Promise<Result<Array<IRoomDTO>>> {
     try {
-      const buildingCodeOrError = await this.roomRepo.findByDomainId(
+      const buildingCodeOrError = await this.buildingRepo.findByCode(
         buildingCode
       );
       if (buildingCodeOrError === null) {
